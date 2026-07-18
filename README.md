@@ -103,7 +103,7 @@ Ollama needed — and stubs `.env`):
 
 ```bash
 sudo apt update && sudo apt install -y git
-git clone https://github.com/pu5ha/research-paper-bot.git ~/ai_podcast
+git clone https://github.com/pu5ha/research_bot.git ~/ai_podcast
 cd ~/ai_podcast && bash deploy/setup.sh
 nano .env                              # TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID / CONTACT_EMAIL
 . .venv/bin/activate
