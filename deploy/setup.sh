@@ -12,6 +12,20 @@ if command -v apt-get >/dev/null 2>&1; then
   sudo apt-get install -y python3-venv python3-pip
 fi
 
+# 1b. On small boxes (<3GB RAM, no swap) add a 2GB swap file so embedding can't OOM.
+if command -v free >/dev/null 2>&1; then
+  mem_mb=$(free -m | awk '/^Mem:/{print $2}')
+  swap_mb=$(free -m | awk '/^Swap:/{print $2}')
+  if [ "${mem_mb:-9999}" -lt 3000 ] && [ "${swap_mb:-0}" -lt 100 ] && [ ! -f /swapfile ]; then
+    echo "==> Low RAM (${mem_mb}MB) — creating a 2GB swap file"
+    sudo fallocate -l 2G /swapfile 2>/dev/null || sudo dd if=/dev/zero of=/swapfile bs=1M count=2048
+    sudo chmod 600 /swapfile
+    sudo mkswap /swapfile >/dev/null
+    sudo swapon /swapfile
+    echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab >/dev/null
+  fi
+fi
+
 # 2. Virtualenv + CPU-only torch (avoids pulling ~2GB of CUDA wheels), then the rest
 if [ ! -d .venv ]; then
   python3 -m venv .venv
