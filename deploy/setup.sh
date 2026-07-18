@@ -19,8 +19,18 @@ fi
 # shellcheck disable=SC1091
 . .venv/bin/activate
 pip install --upgrade pip -q
-echo "==> Installing CPU-only torch"
-pip install -q torch --index-url https://download.pytorch.org/whl/cpu
+# On x86 use the CPU wheel index to skip the ~2GB CUDA download. On ARM64 the
+# default PyPI wheel is already CPU-only, so install it plainly.
+case "$(uname -m)" in
+  x86_64|amd64)
+    echo "==> Installing CPU-only torch (x86)"
+    pip install -q torch --index-url https://download.pytorch.org/whl/cpu
+    ;;
+  *)
+    echo "==> Installing torch ($(uname -m))"
+    pip install -q torch
+    ;;
+esac
 echo "==> Installing remaining requirements"
 pip install -q -r requirements.txt
 
