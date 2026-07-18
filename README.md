@@ -93,52 +93,43 @@ never pinging the same paper twice — depends entirely on that file persisting 
 So the deploy target must give the DB a stable home. A **$5 VPS with cron is the recommended
 setup**; GitHub Actions works but its ephemeral runners make DB persistence fragile.
 
-### (a) Cheap VPS with cron (recommended)
+### (a) Cheap VPS (recommended)
+
+**Host:** a ~2–4 GB RAM box — e.g. Hetzner CX22 (4 GB, ~€4.50/mo) or DigitalOcean/Vultr/Linode
+2 GB ($12/mo), Ubuntu 24.04. Avoid 1 GB (torch + first model load can OOM).
+
+**Bootstrap** (installs a CPU-only torch, creates `config.yaml` with summaries **disabled** — no
+Ollama needed — and stubs `.env`):
 
 ```bash
-git clone <your-repo> ~/ai_podcast && cd ~/ai_podcast
-python3 -m venv .venv && . .venv/bin/activate
-pip install -r requirements.txt
-cp config.example.yaml config.yaml
-cp .env.example .env            # fill in TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID / CONTACT_EMAIL
-curl -fsSL https://ollama.com/install.sh | sh   # for summaries (optional)
-ollama pull llama3.2
-python -m src.main refresh-taste   # build the taste profile once
-mkdir -p logs
+sudo apt update && sudo apt install -y git
+git clone https://github.com/pu5ha/research-paper-bot.git ~/ai_podcast
+cd ~/ai_podcast && bash deploy/setup.sh
+nano .env                              # TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID / CONTACT_EMAIL
+. .venv/bin/activate
+python -m src.main refresh-taste       # build taste profile (downloads bge-small ~130 MB)
+python -m src.main run-once            # smoke test: sends top ≤3 or "quiet day"
 ```
 
-`crontab -e` — one daily paper run + frequent vote draining:
-
-```cron
-# fetch + score + send the day's top ≤3 papers (13:00 UTC)
-0 13 * * * cd ~/ai_podcast && .venv/bin/python -m src.main run-once >> logs/run.log 2>&1
-# record 👍/👎 taps every 2 minutes
-*/2 * * * * cd ~/ai_podcast && .venv/bin/python -m src.main poll-votes --once >> logs/votes.log 2>&1
-```
-
-For **instant** button feedback (instead of up-to-2-min), run `poll-votes` continuously as a
-service instead of the cron above. `~/.config/systemd/user/research-votes.service`:
-
-```ini
-[Unit]
-Description=research-bot vote loop
-After=network-online.target
-
-[Service]
-WorkingDirectory=%h/ai_podcast
-ExecStart=%h/ai_podcast/.venv/bin/python -m src.main poll-votes
-Restart=always
-
-[Install]
-WantedBy=default.target
-```
+**Schedule** — daily paper run via cron:
 
 ```bash
-systemctl --user enable --now research-votes    # `loginctl enable-linger $USER` to survive logout
+(crontab -l 2>/dev/null; echo "0 9 * * * cd ~/ai_podcast && .venv/bin/python -m src.main run-once >> logs/run.log 2>&1") | crontab -
 ```
 
-Ollama must be running (`ollama serve`, or its own systemd unit) for summaries; if it's down,
-messages gracefully fall back to a truncated abstract.
+**Vote loop** as a systemd user service (instant 👍/👎 feedback; ships in `deploy/`):
+
+```bash
+mkdir -p ~/.config/systemd/user && cp deploy/research-votes.service ~/.config/systemd/user/
+systemctl --user daemon-reload && systemctl --user enable --now research-votes
+loginctl enable-linger $USER           # keep it running after logout
+journalctl --user -u research-votes -f # watch votes land
+```
+
+Concurrent `run-once` (cron) + `poll-votes` (service) is safe (WAL + `busy_timeout`). Summaries are
+off on the server; to enable them later, install Ollama (`ollama pull llama3.2`) and set
+`summarizer.enabled: true` in `config.yaml`. (Cron-only alternative for votes: see
+`deploy/crontab.example`.)
 
 ### (b) GitHub Actions (`.github/workflows/poll.yml`)
 
