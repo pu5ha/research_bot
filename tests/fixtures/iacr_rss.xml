@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
+  <channel>
+    <title>Cryptology ePrint Archive</title>
+    <link>https://eprint.iacr.org/rss/rss.xml</link>
+    <description>The Cryptology ePrint Archive provides rapid access to recent
+      research in cryptology. Papers have been placed here by the
+      authors and did not undergo any refereeing process other than
+      verifying that the work seems to be within the scope of
+      cryptology and meets some minimal acceptance criteria and
+      publishing conditions.</description>
+    <atom:link href="https://eprint.iacr.org/rss/rss.xml" rel="self"/>
+    <category>Applications</category>
+    <category>Cryptographic protocols</category>
+    <category>Foundations</category>
+    <category>Implementation</category>
+    <category>Secret-key cryptography</category>
+    <category>Public-key cryptography</category>
+    <category>Attacks and cryptanalysis</category>
+    <copyright>Metadata is available under the CC0 license https://creativecommons.org/publicdomain/zero/1.0/. Each article has a PDF with different license specified for each one.</copyright>
+    <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+    <generator>None of your business</generator>
+    <image>
+      <url>https://iacr.org/img/logo/iacrlogo_small.png</url>
+      <title>Cryptology ePrint Archive</title>
+      <link>https://eprint.iacr.org/rss/rss.xml</link>
+    </image>
+    <language>en-US</language>
+    <lastBuildDate>Sat, 18 Jul 2026 18:24:04 +0000</lastBuildDate>
+    <ttl>1440</ttl>
+    <item>
+      <title>SoK: Offline Finding Protocols for Lightweight Location Tracking</title>
+      <link>https://eprint.iacr.org/2026/488</link>
+      <description><![CDATA[Offline finding (OF) protocols---such as Apple's Find My, Google's Find Hub, Samsung’s SmartThingsFind, and Tile---enable hundreds of millions of users to track their belongings via Bluetooth-based tracker tags. However, their scale and tracking capabilities give rise to privacy risks for tag owners and bystanders, as well as safety risks for victims of tag-facilitated stalking. In response, academics and practitioners have suggested cryptographic and non-cryptographic mitigations to improve privacy and anti-stalking protections, working to navigate complex and subtle tensions between these goals. The result is a large landscape of privacy goals, threat models, protocol designs, implementations, and analyses.
+
+In this work, we systematize the OF protocol landscape.  We gather and analyze a corpus of 49 research papers and  OF protocol technical specifications, and use it to develop a taxonomy capturing the functionality, security, and privacy goals of OF protocols. We use the taxonomy to guide a focused assessment of the four major OF deployments along with six academic constructions, comparing design choices, consolidating known attacks, and analyzing the designs' trade-offs between privacy, security, abusability, and efficiency.  We provide a simple OF protocol that achieves most security goals, and which clarifies the essential cryptographic components underlying OF protocols.  We also provide a survey of physical layer attacks and usability issues that undermine protections in practice.  Finally, we discuss open problems and potential research directions towards secure, interoperable, and abuse-resistant OF systems.]]></description>
+      <guid isPermaLink="true">https://eprint.iacr.org/2026/488</guid>
+      <category>Cryptographic protocols</category>
+      <enclosure url="https://eprint.iacr.org/2026/488.pdf" length="2228871" type="application/pdf"/>
+      <pubDate>Mon, 09 Mar 2026 09:05:50 +0000</pubDate>
+      <dc:creator>Akshaya Kumar</dc:creator>
+      <dc:creator>Carolina Ortega Pérez</dc:creator>
+      <dc:creator>Joseph Jaeger</dc:creator>
+      <dc:creator>Thomas Ristenpart</dc:creator>
+      <dc:creator>Michael A. Specter</dc:creator>
+      <dc:rights>https://creativecommons.org/licenses/by/4.0/</dc:rights>
+    </item><item>
+      <title>Threshold Public-Key Encryption:  Definitions, Relations, and CPA-to-CCA Transforms</title>
+      <link>https://eprint.iacr.org/2025/1665</link>
+      <description><![CDATA[Threshold public-key encryption (TPKE) allows $t$ out of $k$ parties to jointly decrypt a ciphertext, while ensuring confidentiality against any coalition of $t-1$ parties. Despite its long history and ongoing standardisation efforts, there has not been a dedicated study on its basic security notions, and a handful of variations are currently in use.
+
+We initiate the systematic study of TPKE confidentiality and develop relations between notions contrasting indistinguishability (IND) vs. simulatability (SIM), passive (CPA) vs. active (CCA) attacks, and static vs. adaptive corruptions. One of our insights is that security under maximal corruptions does not imply security under fewer corruptions when the adversary has access to partial decryptions on challenge ciphertexts. Maximal corruption was adopted by a significant portion of prior works, and this calls for cautious interpretation when using such a notion.
+    
+We complement our study by providing two generic CPA-to-CCA transforms for TPKE. The first is effectively the Naor--Yung transform, for which we fix a gap in prior work by requiring the underlying TPKE to achieve semi-malicious CPA security, where the adversary can choose randomness for non-challenge ciphertexts. Our second transform applies to any CPA secure TPKE in the random oracle model. We abstract the underlying technique as a standalone novel primitive called non-interactive proof of randomness (NIPoR), and we provide a simple construction from straightline extractable non-interactive zero-knowledge proofs and commitments, which we consider of independent interest.]]></description>
+      <guid isPermaLink="true">https://eprint.iacr.org/2025/1665</guid>
+      <category>Public-key cryptography</category>
+      <enclosure url="https://eprint.iacr.org/2025/1665.pdf" length="879172" type="application/pdf"/>
+      <pubDate>Sat, 13 Sep 2025 22:02:40 +0000</pubDate>
+      <dc:creator>Chris Brzuska</dc:creator>
+      <dc:creator>Michael Klooß</dc:creator>
+      <dc:creator>Ivy K. Y. Woo</dc:creator>
+      <dc:rights>https://creativecommons.org/licenses/by/4.0/</dc:rights>
+    </item><item>
+      <title>Pushing the boundaries of group-based aggregation with zero-evading generators of low additive complexity</title>
+      <link>https://eprint.iacr.org/2026/1148</link>
+      <description><![CDATA[A zero-evading generator with error parameter $\lambda$ is a distribution $Z$ on $\mathbb{F}^n$ such that for any non-zero vector $x\in \mathbb{F}^n$ the probability that $<a,x>=0$ is at most $2^{-\lambda}$, when $a$ is chosen according to $Z$. 
+We investigate the number of additions required to compute $<a,x>$ given $x$. The traditional construction chooses a vector $a$ with random $\lambda$-bit elements. Pippenger's algorithm gives an additive complexity of at least $\Omega(\lambda n/\log n)$ for this approach. We give a construction requiring only $O(n+\lambda)$ additions. We highlight the impact of reducing the number of additions on aggregation of group-based commitments, such as KZG commitments[KZG10].]]></description>
+      <guid isPermaLink="true">https://eprint.iacr.org/2026/1148</guid>
+      <category>Cryptographic protocols</category>
+      <enclosure url="https://eprint.iacr.org/2026/1148.pdf" length="431646" type="application/pdf"/>
+      <pubDate>Tue, 02 Jun 2026 21:41:52 +0000</pubDate>
+      <dc:creator>Ariel Gabizon</dc:creator>
+      <dc:creator>Dmitry Krachun</dc:creator>
+      <dc:rights>https://creativecommons.org/publicdomain/zero/1.0/</dc:rights>
+    </item>
+</channel>
+</rss>

@@ -1,0 +1,11 @@
+# research-bot cron — install with `crontab deploy/crontab.example` (edit paths first).
+# Assumes the repo is at ~/ai_podcast with a .venv. Times are in the server's timezone.
+#
+# If you run the continuous poll-votes systemd service (deploy/research-votes.service),
+# DROP the poll-votes line below — you only need the daily run-once.
+
+# Daily: fetch + score + send the day's top <=3 papers (09:00 local)
+0 9 * * * cd ~/ai_podcast && .venv/bin/python -m src.main run-once >> logs/run.log 2>&1
+
+# Every 2 min: record 👍/👎 taps (omit if using the systemd vote loop)
+*/2 * * * * cd ~/ai_podcast && .venv/bin/python -m src.main poll-votes --once >> logs/votes.log 2>&1

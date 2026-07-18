@@ -1,0 +1,78 @@
+# Taste anchors — one paper per line, format:  Title — one-line gist
+# Blank lines and lines starting with # are ignored.
+# The text before the first " — " is the label shown in Telegram pings ("closest to: ...").
+# Edit freely and re-run:  python -m src.main refresh-taste
+
+# --- AI / ML: models, reasoning, agents ---
+DeepSeek-R1 — Strong reasoning emerges in an LLM through reinforcement learning alone, with no supervised reasoning examples. One of the year's most influential open releases.
+OLMo 2 — A fully open model: weights, data, and training recipe all public. The reference point for reproducible frontier research.
+Qwen2.5 Technical Report — A leading open-weight family; strong multilingual, coding, and long-context performance. Marker of China's open-model push.
+LLaDA (Large Language Diffusion Models) — Generates text by diffusion rather than one token at a time. A credible alternative to the autoregressive transformer paradigm.
+Mixture-of-Recursions — Spends more compute on hard parts of a task and less on easy parts, pointing toward cheaper reasoning.
+SAM 2 — "Segment anything" extended from images to video: track and segment objects across frames.
+Cosmos World Foundation Models — Open world-models for "physical AI" (robotics, simulation); predicts how scenes evolve.
+
+# --- AI for science & math ---
+AlphaGenome — Predicts how DNA mutations affect gene regulation across long stretches of genome; a tool for understanding disease-causing variants.
+Gemini Deep Think — IMO gold — An AI system solved International Math Olympiad problems at gold-medal level from natural-language problem statements.
+RFdiffusion2 — Designs protein backbones directly from the geometry of a desired functional site — a step toward designing enzymes to spec.
+De novo serine hydrolase design — Designed working enzymes from scratch with real catalytic activity, long a holy grail of protein design.
+AI-designed antibodies from scratch — Generated novel antibodies computationally that bind their targets; software released openly.
+
+# --- AI safety / alignment / interpretability ---
+Alignment faking in large language models — A model strategically behaved well during training to avoid having its values changed. Early empirical evidence of deceptive behavior.
+Frontier models are capable of in-context scheming — Frontier models will, in some setups, pursue hidden goals and act deceptively to reach them.
+On the Biology of a Large Language Model — "Circuit tracing" / attribution graphs that map internal reasoning steps a model doesn't state out loud.
+Auditing language models for hidden objectives — Trained a model with a secret goal, then had blind teams try to uncover it — building the practice of alignment audits.
+Stress-testing anti-scheming training — Trained scheming out of models; found reductions but also that models can become better at hiding it or notice they're being evaluated.
+Emergent misalignment — Narrow bad training (insecure code, reward-hacking) can spill over into broad misbehavior across unrelated tasks.
+
+# --- Cryptography / zero-knowledge ---
+Gödel in Cryptography — A new notion of zero-knowledge proofs for NP with no interaction, no trusted setup, and perfect soundness. Deep theory result.
+WHIR — Reed–Solomon proximity testing with very fast verification; makes practical SNARK/STARK proof systems faster.
+NIZKs from DDH + LPN (without LWE) — First non-interactive zero-knowledge proofs from a new mix of assumptions, diversifying what ZK can be built on.
+
+# --- Blockchain / Ethereum ---
+The Extremely Lean Chain (Lean Ethereum) — A multi-year redesign of Ethereum's core using recursive STARK proofs, aiming for quantum resistance and millions of validators.
+Hyper-scaling state — Tackling on-chain state bloat by inventing new, cheaper forms of state so nodes stay runnable as the chain grows.
+RISC-V as Ethereum's execution layer — Proposal to swap the EVM's internals toward RISC-V for better ZK-proving; a live technical debate (Offchain Labs rebutted for WASM).
+
+# --- Longevity / aging ---
+Partial reprogramming reverses mesenchymal drift — Periodic Yamanaka-factor treatment in old mice rolled back age-related gene-expression changes in kidney and liver.
+Senescence-resistant cells rejuvenate aged primates — FOXO3-engineered progenitor cells delivered to elderly monkeys over ~44 weeks produced systemic signs of rejuvenation.
+Brain & immune "age" predict healthspan — The biological age of your brain and immune system are especially strong predictors of long-term health.
+
+# --- Health / medicine ---
+Baby KJ — first personalized in-vivo CRISPR therapy — A bespoke CRISPR base-editor designed and delivered in ~6 months to treat one infant's fatal metabolic disorder (CPS1 deficiency).
+Huntington's gene therapy (uniQure AMT-130) — A one-time therapy into the striatum reportedly slowed disease progression by ~75% at three years.
+Gene therapy restores hearing (OTOF) — Restored hearing in people born deaf from OTOF-gene mutations.
+Obicetrapib — Oral CETP inhibitor cut LDL cholesterol by ~30% on top of maximal statin therapy in high-risk patients (phase 3).
+AI blood test for 12 cancers via fragmentomics — Detects cancers (often pre-symptom) from how tumor-DNA fragments break apart, and predicts tissue of origin.
+Oral pill for sleep apnea (Apnimed) — A daily pill meaningfully reduced apnea severity — potentially the first drug for a condition usually treated with machines.
+
+# --- Economics (mostly AI x labor) ---
+Canaries in the Coal Mine — Declining early-career employment in occupations most exposed to generative AI, with older workers less affected.
+Large Language Models, Small Labor Market Effects — Denmark's full employment registers show near-zero aggregate wage/hours effects from ChatGPT through 2024.
+The Simple Macroeconomics of AI — Argues near-term economy-wide productivity gains from AI are modest (well under 1% TFP over a decade). The skeptical anchor.
+AI and the Labor Market — New task-level measures of AI exposure; finds real effects on firm growth and within-firm reallocation of work.
+
+# --- Cybersecurity ---
+Google "Big Sleep" finds a live zero-day — First public case of an AI agent finding a previously-unknown exploitable memory bug in widely-used software (SQLite, CVE-2025-6965).
+LLM agents can exploit zero-day vulnerabilities — Teams of LLM agents autonomously exploited real vulnerabilities — the offensive flip-side of Big Sleep.
+
+# --- Quantum computing ---
+Quantum Echoes on Willow — Claimed first verifiable quantum advantage: an algorithm ~13,000x faster than classical supercomputers, with checkable results.
+Majorana 1 — A processor built on topological qubits, a long-bet architecture that could be more error-resistant if it pans out.
+Algorithmic fault tolerance (QuEra) — Techniques reported to cut quantum error-correction overhead by up to ~100x, pulling practical timelines closer.
+
+# --- Open hardware / systems ---
+OpenTitan — Open-source, silicon-proven hardware root-of-trust chip — open hardware reaching real security-critical use.
+RISC-V goes mainstream — NVIDIA announcing CUDA support for RISC-V, Google using RISC-V cores in TPUs; the open ISA crossing into frontier AI hardware.
+
+# --- More AI x work / method papers ---
+Generative AI at Work — Customer-support agents with an AI assistant were meaningfully more productive, especially less-experienced ones.
+CRISPR-GPT — An AI "copilot" that designs gene-editing experiments in months instead of years.
+Data Shapley in One Training Run — A practical way to measure which training examples actually help or hurt a model — useful for data curation.
+Learning Dynamics of LLM Fine-tuning — Makes fine-tuning measurable: what actually changes inside a model as it's tuned.
+Forecasting the Economic Effects of AI — Runs a structured panel of economists and superforecasters on AI's growth impact; captures the real disagreement.
+Cosmos world-model + robotics eval — Broader push toward models that predict physical dynamics; a signal for embodied AI interest.

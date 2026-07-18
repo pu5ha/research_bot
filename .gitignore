@@ -1,0 +1,18 @@
+# Secrets and data
+.env
+data/
+
+# Environment-specific config (create from config.example.yaml per host)
+config.yaml
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+# Model / HF caches (in case they land in-tree)
+.cache/
+*.egg-info/

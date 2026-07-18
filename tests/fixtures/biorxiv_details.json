@@ -1,0 +1,74 @@
+{
+  "messages": [
+    {
+      "status": "ok",
+      "category": "all",
+      "interval": "2026-07-15:2026-07-18",
+      "funder": "all",
+      "cursor": 0,
+      "count": 3,
+      "count_new_papers": "522",
+      "total": "3"
+    }
+  ],
+  "collection": [
+    {
+      "title": "Laterality of subcortical structures predicts spontaneous brain dynamics",
+      "authors": "Ghafari, T.; Quinn, A. J.; Jensen, O.",
+      "author_corresponding": "Tara Ghafari",
+      "author_corresponding_institution": "University of Oxford",
+      "doi": "10.64898/2026.07.13.738145",
+      "date": "2026-07-15",
+      "version": "1",
+      "type": "new results",
+      "license": "cc_by",
+      "category": "neuroscience",
+      "jatsxml": "https://www.biorxiv.org/content/early/2026/07/15/2026.07.13.738145.source.xml",
+      "abstract": "Subcortical structures play a key role in shaping cortical computation through distributed cortico-subcortical networks, yet it remains unclear whether individual differences in subcortical anatomy ar",
+      "funder": "NA",
+      "published": "NA",
+      "server": "bioRxiv"
+    },
+    {
+      "title": "Decoding and Characterizing the Intracranial Representation of Semantic Information",
+      "authors": "Smith, C.; Inchyna, S.; Barrentine, B.; Nelson, M. J.",
+      "author_corresponding": "Matthew John Nelson",
+      "author_corresponding_institution": "University of Alabama at Birmingham",
+      "doi": "10.64898/2026.07.13.738249",
+      "date": "2026-07-15",
+      "version": "1",
+      "type": "new results",
+      "license": "cc_by_nc",
+      "category": "neuroscience",
+      "jatsxml": "https://www.biorxiv.org/content/early/2026/07/15/2026.07.13.738249.source.xml",
+      "abstract": "Brain-computer interfaces (BCIs) have achieved impressive performance by decoding motor and articulatory signals associated with speech production. However, considerably less is known about whether hi",
+      "funder": "NA",
+      "published": "NA",
+      "server": "bioRxiv"
+    },
+    {
+      "title": "Host infection selects for sRNA variants that drive bacterial social cheating",
+      "authors": "Dubois, Q.; Brual, T.; Sprenger, M.; Utzinger, V.; Mercier, R.; Cigna, J.; Rodrigue, A.; Papenfort, K.; Attaiech, L.; Gueguen, E.",
+      "author_corresponding": "Erwan Gueguen",
+      "author_corresponding_institution": "Universite Claude Bernard Lyon1, CNRS, INSA Lyon, UMR5240 MAP, F-69622, LYON, France",
+      "doi": "10.64898/2025.12.19.695336",
+      "date": "2026-07-15",
+      "version": "3",
+      "type": "new results",
+      "license": "cc_by_nc",
+      "category": "microbiology",
+      "jatsxml": "https://www.biorxiv.org/content/early/2026/07/15/2025.12.19.695336.source.xml",
+      "abstract": "Single-nucleotide mutations in regulatory small RNAs (sRNAs) represent a largely unexplored route to social cheating during bacterial infection. Here we show that arcZ, encoding a conserved Hfq-depend",
+      "funder": [
+        {
+          "name": "Agence Nationale de la Recherche",
+          "id": "https://ror.org/00rbzpz17",
+          "id-type": "ROR",
+          "award": "ANR-22-CE35-0017;"
+        }
+      ],
+      "published": "NA",
+      "server": "bioRxiv"
+    }
+  ]
+}

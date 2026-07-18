@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+<title>NBER New Working Papers</title>
+<link>https://www.nber.org</link>
+<description>Recent NBER working papers</description>
+<item>
+<title>Automation, Skills, and the Future of Local Labor Markets</title>
+<link>https://www.nber.org/papers/w34123</link>
+<description>We study how exposure to automation reshapes employment across US commuting zones, finding sizeable within-firm reallocation of tasks.</description>
+<pubDate>Wed, 15 Jul 2026 00:00:00 GMT</pubDate>
+</item>
+<item>
+<title>The Macroeconomics of Generative AI Adoption</title>
+<link>https://www.nber.org/papers/w34124</link>
+<description>Using firm-level microdata, we estimate modest aggregate productivity effects from generative AI through 2025.</description>
+</item>
+</channel>
+</rss>

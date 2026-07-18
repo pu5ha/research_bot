@@ -1,0 +1,23 @@
+model: BAAI/bge-small-en-v1.5
+# Local LLM (Ollama) that writes the 3-sentence summary shown in each Telegram ping.
+# Only runs for the papers actually sent (≤ max_per_day), so cost is trivial.
+# Falls back to a truncated abstract if Ollama is unreachable.
+summarizer: {enabled: true, model: llama3.2, url: "http://localhost:11434", timeout: 60}
+max_per_day: 3
+max_age_hours: 72  # 3 days: covers arXiv's Mon–Fri cadence so weekend runs aren't starved
+lambda_neg: 0.5
+dedup_sim: 0.90
+# Per-source similarity bars. Calibrated for bge-small + title-only seeds, whose
+# embeddings cluster near 0.8 (run `calibrate` to re-tune). arxiv/biorxiv measured;
+# iacr/nber provisional (couldn't be measured yet — NBER 403s, IACR feed was sparse).
+bars: {arxiv: 0.82, biorxiv: 0.78, medrxiv: 0.78, iacr: 0.76, nber: 0.76}
+# Per-source fetch window (days) for a daily run. Tight for the arXiv firehose;
+# wider for low-volume feeds whose RSS is sparse/unsorted. `calibrate --days N`
+# overrides all of these uniformly.
+windows: {arxiv: 3, biorxiv: 2, medrxiv: 2, iacr: 5, nber: 7}
+sources:
+  arxiv:   {enabled: true, categories: [cs.LG, cs.AI, cs.CL, cs.CR, cs.DC, cs.NE, stat.ML, econ.GN, q-bio.BM, q-bio.GN]}
+  biorxiv: {enabled: true, categories: [aging, genomics, genetics, neuroscience, synthetic biology, bioinformatics, cell biology, immunology, molecular biology, biochemistry, cancer biology, biophysics, microbiology]}
+  medrxiv: {enabled: false}
+  iacr:    {enabled: true}
+  nber:    {enabled: true}

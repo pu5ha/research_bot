@@ -1,0 +1,61 @@
+name: research-bot
+
+# Daily paper run + frequent vote draining. NOTE: GitHub Actions runners are
+# ephemeral — see the persistence caveats in README §Deployment. A $5 VPS with
+# cron is simpler and the recommended target. Summaries fall back to truncated
+# abstracts here (no Ollama on the runner).
+
+on:
+  schedule:
+    - cron: "0 13 * * *"    # run-once daily at 13:00 UTC
+    - cron: "*/15 * * * *"  # poll-votes --once every 15 min
+  workflow_dispatch: {}
+
+concurrency:
+  group: research-bot        # never let two runs race on the DB
+  cancel-in-progress: false
+
+jobs:
+  bot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      # Best-effort DB persistence across runs. Cache eviction loses state and can
+      # cause re-sends — acceptable for a toy, not for reliability. Prefer a VPS.
+      - name: Restore bot.db
+        uses: actions/cache@v4
+        with:
+          path: data
+          key: bot-db-${{ github.run_id }}
+          restore-keys: bot-db-
+
+      - name: Cache embedding model
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-bge-small-en-v1.5
+
+      - run: pip install -r requirements.txt
+
+      - name: Ensure config + taste profile
+        run: |
+          cp -n config.example.yaml config.yaml || true
+          python -m src.main refresh-taste
+
+      - name: Run
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          CONTACT_EMAIL: ${{ secrets.CONTACT_EMAIL }}
+        run: |
+          if [ "${{ github.event.schedule }}" = "0 13 * * *" ]; then
+            python -m src.main run-once
+          else
+            python -m src.main poll-votes --once
+          fi

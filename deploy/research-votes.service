@@ -1,0 +1,14 @@
+[Unit]
+Description=research-bot vote loop (poll-votes)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+# Edit WorkingDirectory/ExecStart if you cloned somewhere other than ~/ai_podcast
+WorkingDirectory=%h/ai_podcast
+ExecStart=%h/ai_podcast/.venv/bin/python -m src.main poll-votes
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target
