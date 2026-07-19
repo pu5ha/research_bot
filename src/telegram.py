@@ -72,6 +72,32 @@ def send_paper(cfg: Config, paper: Paper, summary: str) -> int | None:
     return int(data["result"]["message_id"])
 
 
+def send_text(cfg: Config, text: str) -> int | None:
+    """Send a plain status message (no paper card, no vote buttons).
+
+    Used for the quiet-day alert so a morning with < max_per_day qualifiers still
+    produces a ping instead of silence.
+    """
+    if not is_configured(cfg):
+        raise RuntimeError("Telegram not configured (set TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID)")
+    resp = httpx.post(
+        f"{API}/bot{cfg.secrets.telegram_bot_token}/sendMessage",
+        data={
+            "chat_id": cfg.secrets.telegram_chat_id,
+            "text": text,
+            "disable_web_page_preview": True,
+        },
+        timeout=30,
+        follow_redirects=True,
+    )
+    resp.raise_for_status()
+    data = resp.json()
+    if not data.get("ok"):
+        log.warning("telegram sendMessage (text) not ok: %s", data)
+        return None
+    return int(data["result"]["message_id"])
+
+
 def _api(cfg: Config, method: str) -> str:
     return f"{API}/bot{cfg.secrets.telegram_bot_token}/{method}"
 

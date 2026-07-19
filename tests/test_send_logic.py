@@ -53,7 +53,7 @@ def _plan(cands, **kw):
         dedup_sim=0.90,
         max_age_hours=48,
         max_per_day=3,
-        already_sent_24h=0,
+        already_sent_today=0,
         now=NOW,
     )
     defaults.update(kw)
@@ -74,7 +74,7 @@ def test_plan_bar_filter_and_cap() -> None:
 
 def test_plan_respects_remaining_slots() -> None:
     cands = [_cand("a", 0.90, [1, 0, 0]), _cand("b", 0.80, [0, 1, 0])]
-    plan = _plan(cands, already_sent_24h=2)  # only 1 slot left
+    plan = _plan(cands, already_sent_today=2)  # only 1 slot left
     assert plan.slots == 1
     assert [p.uid for p, _, _ in plan.to_send] == ["a"]
 

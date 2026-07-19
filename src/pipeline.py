@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import json
 import logging
 import sqlite3
 from dataclasses import dataclass, field
@@ -93,7 +94,7 @@ class SendPlan:
     fetched: int = 0
     new: int = 0
     qualifiers: int = 0  # after bar + age + near-dup dedup
-    already_sent_24h: int = 0
+    already_sent_today: int = 0
     slots: int = 0
     # All newly-seen papers (post-embedding), for persistence — everything here gets
     # marked seen; those not in ``to_send`` are dropped by design (spec §8).
@@ -119,8 +120,17 @@ def recent_sent_vectors(
     ]
 
 
-def sent_in_last_24h(conn: sqlite3.Connection) -> int:
-    cutoff = (datetime.now(timezone.utc) - timedelta(hours=24)).isoformat(timespec="seconds")
+def sent_today(conn: sqlite3.Connection) -> int:
+    """Count sends in the current *local* calendar day (the daily cap, spec §8).
+
+    Stored ``sent_at`` is UTC; we compare against local midnight converted to UTC so
+    the cap resets cleanly at 00:00 local time. This replaced a rolling-24h window,
+    under which a mid-afternoon batch still counted against the next morning's quota.
+    """
+    local_midnight = (
+        datetime.now().astimezone().replace(hour=0, minute=0, second=0, microsecond=0)
+    )
+    cutoff = local_midnight.astimezone(timezone.utc).isoformat(timespec="seconds")
     row = conn.execute(
         "SELECT COUNT(*) AS c FROM sent WHERE sent_at >= ?", (cutoff,)
     ).fetchone()
@@ -137,10 +147,10 @@ def plan_from_scored(
     dedup_sim: float,
     max_age_hours: int,
     max_per_day: int,
-    already_sent_24h: int,
+    already_sent_today: int,
     now: datetime,
 ) -> SendPlan:
-    """Pure §8 selection: age filter → per-source bar → near-dup dedup → sort → 24h cap."""
+    """Pure §8 selection: age filter → per-source bar → near-dup dedup → sort → daily cap."""
     age_cutoff = now - timedelta(hours=max_age_hours)
     candidates: list[Candidate] = []
     for i, (p, r) in enumerate(zip(new, results)):
@@ -151,11 +161,11 @@ def plan_from_scored(
 
     deduped = drop_near_duplicates(candidates, recent, dedup_sim)
     deduped.sort(key=lambda t: -t[1].score)
-    slots = max(0, max_per_day - already_sent_24h)
+    slots = max(0, max_per_day - already_sent_today)
     return SendPlan(
         new=len(new),
         qualifiers=len(deduped),
-        already_sent_24h=already_sent_24h,
+        already_sent_today=already_sent_today,
         slots=slots,
         to_send=deduped[:slots],
     )
@@ -170,10 +180,10 @@ def run_cycle(cfg: Config, conn: sqlite3.Connection) -> SendPlan:
     new = filter_unseen(conn, fetched)
     log.info("fetched %d, new after seen-dedup %d", len(fetched), len(new))
     if not new:
-        already = sent_in_last_24h(conn)
+        already = sent_today(conn)
         return SendPlan(
             fetched=len(fetched),
-            already_sent_24h=already,
+            already_sent_today=already,
             slots=max(0, cfg.max_per_day - already),
         )
 
@@ -192,7 +202,7 @@ def run_cycle(cfg: Config, conn: sqlite3.Connection) -> SendPlan:
         dedup_sim=cfg.dedup_sim,
         max_age_hours=cfg.max_age_hours,
         max_per_day=cfg.max_per_day,
-        already_sent_24h=sent_in_last_24h(conn),
+        already_sent_today=sent_today(conn),
         now=datetime.now(timezone.utc),
     )
     plan.fetched = len(fetched)
@@ -234,3 +244,44 @@ def persist_and_send(cfg: Config, conn: sqlite3.Connection, plan: SendPlan) -> i
             conn.commit()
             sent += 1
     return sent
+
+
+def select_unsent_qualifiers(
+    conn: sqlite3.Connection, cfg: Config, *, ignore_age: bool = False
+) -> list[Candidate]:
+    """Highest-scoring stored papers that clear their per-source bar and were never sent.
+
+    Backs the ``send-now`` admin command: seed or re-kick the feed from papers the
+    daily cap left undelivered. ``ignore_age`` relaxes the freshness window for a
+    one-off manual send. Returned as ``(paper, result, embedding)`` so it feeds
+    straight into :func:`persist_and_send`.
+    """
+    cutoff = datetime.now(timezone.utc) - timedelta(hours=cfg.max_age_hours)
+    rows = conn.execute(
+        "SELECT p.* FROM papers p LEFT JOIN sent s ON s.uid = p.uid "
+        "WHERE s.uid IS NULL ORDER BY p.score DESC"
+    ).fetchall()
+    out: list[Candidate] = []
+    for r in rows:
+        score = r["score"] or 0.0
+        if score < cfg.bars.get(r["source"], 1.0):
+            continue
+        published = datetime.fromisoformat(r["published"]) if r["published"] else None
+        if not ignore_age and published is not None and published < cutoff:
+            continue
+        if r["embedding"] is None:
+            continue
+        paper = Paper(
+            uid=r["uid"],
+            source=r["source"],
+            title=r["title"],
+            abstract=r["abstract"] or "",
+            authors=json.loads(r["authors"] or "[]"),
+            url=r["url"] or "",
+            categories=json.loads(r["categories"] or "[]"),
+            published=published,
+        )
+        out.append(
+            (paper, ScoreResult(score=score, nearest=r["nearest"] or ""), blob_to_embedding(r["embedding"]))
+        )
+    return out
